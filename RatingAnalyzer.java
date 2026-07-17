@@ -53,6 +53,25 @@ public class RatingAnalyzer {
         return total / count;
     }
 
+    public List<Review> restaurantsByCuisine(String cuisine) {
+
+        List<Review> restaurants = new ArrayList<>();
+
+        for (Review r : reviews) {
+            if (r.cuisine != null && r.cuisine.equals(cuisine)) {
+                restaurants.add(r);
+            }
+        }
+
+        Collections.sort(restaurants, new Comparator<Review>() {
+            public int compare(Review r1, Review r2) {
+                return r1.restaurant.compareTo(r2.restaurant);
+            }
+        });
+
+        return restaurants;
+    }
+
     public List<Review> topRatedRestaurants(String cuisine) {
 
         List<Review> topRestaurants = new ArrayList<>();
@@ -100,15 +119,20 @@ public class RatingAnalyzer {
             input = in.next();
 
             if (input.equalsIgnoreCase("quit") == false) {
-                System.out.println("Avg rating: " + ra.averageRating(input));
+                List<Review> restaurants = ra.restaurantsByCuisine(input);
 
-                List<Review> topRestaurants = ra.topRatedRestaurants(input);
-
-                if (topRestaurants.isEmpty()) {
+                if (restaurants.isEmpty()) {
                     System.out.println("No restaurants found for that cuisine.");
                 } else {
+                    System.out.println("Avg rating: " + ra.averageRating(input));
+
+                    System.out.println("All restaurants:");
+                    for (Review r : restaurants) {
+                        System.out.println(r.restaurant + ": " + r.rating);
+                    }
+
                     System.out.println("Top rated restaurant(s):");
-                    for (Review r : topRestaurants) {
+                    for (Review r : ra.topRatedRestaurants(input)) {
                         System.out.println(r.restaurant + ": " + r.rating);
                     }
                 }
