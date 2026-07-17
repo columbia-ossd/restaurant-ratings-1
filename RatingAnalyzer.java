@@ -26,6 +26,14 @@ public class RatingAnalyzer {
 
     public double averageRating(String cuisine) {
 
+        if (cuisine == null || cuisine.isBlank()) {
+          return 0;
+        }
+
+        if (reviews == null) {
+          return 0;
+        }
+
         double total = 0;
         int count = 0;
 
